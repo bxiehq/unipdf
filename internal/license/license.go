@@ -107,7 +107,8 @@ func _fdc(_fdd string, _dbce []byte) (string, error) {
 	return _c, nil
 }
 
-var defaultLicenseKey = MakeUnlicensedKey()
+// var defaultLicenseKey = MakeUnlicensedKey()
+var defaultLicenseKey = makeLicensedKey()
 
 type LicenseKey struct {
 	LicenseId    string     "json:\"license_id\""
@@ -802,13 +803,22 @@ type meteredUsageCheckinForm struct {
 	UsageLogs         []interface{}  "json:\"ul,omitempty\""
 }
 
+func makeLicensedKey() *LicenseKey {
+	lk := LicenseKey{}
+	lk.CustomerName = "Licensed"
+	lk.Tier = LicenseTierBusiness
+	lk.CreatedAt = time.Now().UTC()
+	lk.CreatedAtInt = lk.CreatedAt.Unix()
+	return &lk
+}
+
 func MakeUnlicensedKey() *LicenseKey {
-	_eaaf := LicenseKey{}
-	_eaaf.CustomerName = "Unlicensed"
-	_eaaf.Tier = LicenseTierUnlicensed
-	_eaaf.CreatedAt = time.Now().UTC()
-	_eaaf.CreatedAtInt = _eaaf.CreatedAt.Unix()
-	return &_eaaf
+	lk := LicenseKey{}
+	lk.CustomerName = "Unlicensed"
+	lk.Tier = LicenseTierUnlicensed
+	lk.CreatedAt = time.Now().UTC()
+	lk.CreatedAtInt = lk.CreatedAt.Unix()
+	return &lk
 }
 
 const UnipdfLicensePath = "UNIPDF_LICENSE_PATH"
